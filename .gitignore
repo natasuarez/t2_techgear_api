@@ -1,3 +1,4 @@
-venv/
-_pycache__/
 .env
+techgear_api/.env
+venv/
+__pycache__/
