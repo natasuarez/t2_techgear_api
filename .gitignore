@@ -1,4 +1,13 @@
+# Entorno virtual
+venv/
+
+# Caché de Python
+__pycache__/
+
+# Variables de entorno
 .env
 techgear_api/.env
-venv/
-__pycache__/
+
+# Bases de datos locales
+db.sqlite3
+*.sqlite3
