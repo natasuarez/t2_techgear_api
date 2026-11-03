@@ -23,9 +23,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-xnmqq_)96x@zo=57mg)!%@*!p*_+#ia+pat%e9tj4v_@$0^wj%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = False  # Cambiado a False para producción
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*'
+     'localhost',
+     '127.0.0.1',
+     '.vercel.app',
+     '.onrender.com'
+]  # Opcional, pero recomendado mientras estás en desarrollo local
 
 
 # Application definition
@@ -37,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'store.apps.StoreConfig',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +61,7 @@ ROOT_URLCONF = 'urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'techgear_web' / 'templates'],  # <-- Corrige esta línea
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

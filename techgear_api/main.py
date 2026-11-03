@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from passlib.context import CryptContext
 from jose import jwt
 from pydantic import BaseModel, EmailStr
+from fastapi import FastAPI
 
 # Importa tus esquemas Pydantic
 from techgear_api.models.product import ProductSchema, ProductResponse
@@ -15,6 +16,13 @@ from techgear_api.models.user import UserSchema, UserResponse
 
 load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def read_root():
+    return {"message": "Bienvenido a TechGear API"}
 
 app = FastAPI(title="TechGear API", version="1.0")
 
@@ -22,7 +30,7 @@ client = AsyncIOMotorClient(MONGO_URI)
 db = client.techgear_db  # Nombre de tu base de datos en Atlas
 
 # --- CONFIGURACIÓN DE SEGURIDAD Y JWT ---
-SECRET_KEY = "tu_clave_secreta_super_segura_techgear"  # En producción usa os.getenv("SECRET_KEY")
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
