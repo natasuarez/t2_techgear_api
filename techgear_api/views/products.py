@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
-from src.database import product_collection
-from src.models.product import ProductSchema, ProductResponse
+from database import product_collection
+from models.product import ProductSchema, ProductResponse
 from bson import ObjectId
 
 router = APIRouter(prefix="/products", tags=["Productos"])

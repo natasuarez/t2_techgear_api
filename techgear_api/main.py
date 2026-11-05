@@ -10,9 +10,9 @@ from pydantic import BaseModel, EmailStr
 from fastapi import FastAPI
 
 # Importa tus esquemas Pydantic
-from techgear_api.models.product import ProductSchema, ProductResponse
-from techgear_api.models.order import OrderSchema, OrderResponse
-from techgear_api.models.user import UserSchema, UserResponse
+from models.product import ProductSchema, ProductResponse
+from models.order import OrderSchema, OrderResponse
+from models.user import UserSchema, UserResponse
 
 load_dotenv()
 MONGO_URI = os.getenv("MONGO_URI")
