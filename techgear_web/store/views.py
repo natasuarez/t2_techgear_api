@@ -407,12 +407,27 @@ def view_cart(request):
         for item in cart.values()
     )
 
+    productos = []
+
+    try:
+        respuesta = requests.get(
+            f"{API_URL}/products/",
+            timeout=15
+        )
+
+        if respuesta.status_code == 200:
+            productos = respuesta.json()
+
+    except requests.RequestException:
+        messages.error(request, "No se pudieron cargar los productos.")
+
     return render(
         request,
         "store/cart.html",
         {
             "cart": cart,
-            "total": total
+            "total": total,
+            "productos": productos
         }
     )
 
