@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -22,21 +21,21 @@
 
                 <div class="d-flex align-items-center gap-2">
                     {% if request.session.access_token %}
-                        <span class="text-white">
-                            Hola, <strong>{{ request.session.nombre }}</strong>
-                        </span>
+                    <span class="text-white">
+                        Hola, <strong>{{ request.session.nombre }}</strong>
+                    </span>
 
-                        <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
-                            Cerrar sesión
-                        </a>
+                    <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">
+                        Cerrar sesión
+                    </a>
                     {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-primary btn-sm">
-                            Iniciar sesión
-                        </a>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-sm">
+                        Iniciar sesión
+                    </a>
 
-                        <a href="{% url 'register' %}" class="btn btn-outline-light btn-sm">
-                            Registrarse
-                        </a>
+                    <a href="{% url 'register' %}" class="btn btn-outline-light btn-sm">
+                        Registrarse
+                    </a>
                     {% endif %}
                 </div>
             </div>
@@ -47,225 +46,281 @@
 
         <!-- Mensajes -->
         {% if messages %}
-            <div aria-live="polite">
-                {% for message in messages %}
-                    <div class="alert alert-info alert-dismissible fade show shadow-sm small" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar notificación"></button>
-                    </div>
-                {% endfor %}
+        <div aria-live="polite">
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show shadow-sm small" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                    aria-label="Cerrar notificación"></button>
             </div>
+            {% endfor %}
+        </div>
         {% endif %}
 
         <h1 class="h2 mb-4 fw-bold text-dark">
             📦 Detalle del Pedido y Stock
         </h1>
 
-        {% if cart %}
 
-            <div class="row">
+        <!-- CATÁLOGO DE PRODUCTOS -->
+        <section class="mb-5">
+            <h2 class="h4 fw-bold mb-4">🛍️ Productos disponibles</h2>
 
-                <!-- Productos del carrito -->
-                <div class="col-lg-8">
-                    <div class="card shadow-sm border-0 rounded-4 mb-4 bg-white">
-                        <div class="card-body p-0">
+            <div class="row g-4">
+                {% for producto in productos %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="card h-100 shadow-sm border-0 rounded-4">
 
-                            <div class="table-responsive">
-                                <table class="table table-hover mb-0 align-middle">
-
-                                    <thead class="table-dark">
-                                        <tr>
-                                            <th scope="col" class="ps-3">Producto</th>
-                                            <th scope="col">Precio</th>
-                                            <th scope="col">Talla</th>
-                                            <th scope="col">Cantidad / Stock</th>
-                                            <th scope="col">Subtotal</th>
-                                            <th scope="col" class="text-end pe-3">Acciones</th>
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {% for product_id, item in cart.items %}
-
-                                            <tr>
-                                                <td class="ps-3">
-                                                    <div class="d-flex align-items-center gap-3">
-
-                                                        {% if item.imagen %}
-                                                            <img src="{{ item.imagen }}"
-                                                                alt="{{ item.nombre }}"
-                                                                width="50"
-                                                                height="50"
-                                                                class="rounded-3"
-                                                                style="object-fit: cover;">
-                                                        {% else %}
-                                                            <div class="bg-secondary rounded-3 text-white d-flex align-items-center justify-content-center"
-                                                                style="width: 50px; height: 50px;">
-                                                                👟
-                                                            </div>
-                                                        {% endif %}
-
-                                                        <div>
-                                                            <span class="fw-bold text-dark d-block">
-                                                                {{ item.nombre }}
-                                                            </span>
-
-                                                            <small class="text-muted">
-                                                                Stock disponible:
-                                                                <strong>{{ item.stock }}</strong> u.
-                                                            </small>
-                                                        </div>
-
-                                                    </div>
-                                                </td>
-
-                                                <td class="text-secondary">
-                                                    ${{ item.precio }}
-                                                </td>
-
-                                                <!-- Selección de talla -->
-                                                <td>
-                                                    <form action="{% url 'update_cart_size' product_id %}"
-                                                        method="POST"
-                                                        class="d-inline">
-
-                                                        {% csrf_token %}
-
-                                                        <label for="talla-select-{{ product_id }}"
-                                                            class="visually-hidden">
-                                                            Seleccionar talla para {{ item.nombre }}
-                                                        </label>
-
-                                                        <select id="talla-select-{{ product_id }}"
-                                                            name="talla"
-                                                            class="form-select form-select-sm"
-                                                            onchange="this.form.submit()"
-                                                            style="width: 80px;">
-
-                                                            <option value="37" {% if item.talla == "37" %}selected{% endif %}>37</option>
-                                                            <option value="38" {% if item.talla == "38" %}selected{% endif %}>38</option>
-                                                            <option value="39" {% if item.talla == "39" %}selected{% endif %}>39</option>
-                                                            <option value="40" {% if item.talla == "40" %}selected{% endif %}>40</option>
-                                                            <option value="41" {% if item.talla == "41" %}selected{% endif %}>41</option>
-                                                            <option value="42" {% if item.talla == "42" %}selected{% endif %}>42</option>
-
-                                                        </select>
-                                                    </form>
-                                                </td>
-
-                                                <!-- Cantidad -->
-                                                <td>
-                                                    <div class="input-group input-group-sm" style="width: 110px;">
-
-                                                        <a href="{% url 'decrease_quantity' product_id %}"
-                                                            class="btn btn-outline-secondary"
-                                                            aria-label="Disminuir cantidad">
-                                                            -
-                                                        </a>
-
-                                                        <span class="input-group-text bg-white text-dark fw-bold px-3">
-                                                            {{ item.cantidad }}
-                                                        </span>
-
-                                                        <a href="{% url 'increase_quantity' product_id %}"
-                                                            class="btn btn-outline-secondary"
-                                                            aria-label="Aumentar cantidad">
-                                                            +
-                                                        </a>
-
-                                                    </div>
-                                                </td>
-
-                                                <!-- Subtotal -->
-                                                <td class="fw-bold text-success">
-                                                    ${{ item.subtotal }}
-                                                </td>
-
-                                                <!-- Eliminar -->
-                                                <td class="text-end pe-3">
-                                                    <a href="{% url 'remove_from_cart' product_id %}"
-                                                        class="btn btn-sm btn-outline-danger rounded-3"
-                                                        aria-label="Eliminar producto"
-                                                        onclick="return confirm('¿Deseas quitar este producto del pedido?');">
-                                                        Eliminar
-                                                    </a>
-                                                </td>
-
-                                            </tr>
-
-                                        {% endfor %}
-                                    </tbody>
-
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Resumen del pedido -->
-                <div class="col-lg-4">
-                    <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
-
-                        <h2 class="h5 fw-bold mb-3 text-dark">
-                            Resumen del Pedido
-                        </h2>
-
-                        <hr>
-
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="text-muted">Subtotal:</span>
-                            <span class="fw-semibold text-dark">${{ total }}</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
-                            <span class="text-muted">Envío:</span>
-                            <span class="text-success fw-semibold">Gratis</span>
-                        </div>
-
-                        <div class="d-flex justify-content-between mb-4">
-                            <span class="fw-bold text-dark">Total del Pedido:</span>
-                            <span class="fw-bold text-primary fs-4">${{ total }}</span>
-                        </div>
-
-                        {% if request.session.access_token and request.session.rol == "cliente" %}
-                            <a href="{% url 'create_order' %}"
-                                class="btn btn-success w-100 py-2 fw-bold rounded-3 shadow-sm">
-                                💳 Finalizar Pedido
-                            </a>
-                        {% elif not request.session.access_token %}
-                            <a href="{% url 'login' %}"
-                                class="btn btn-primary w-100 py-2 fw-bold rounded-3">
-                                Iniciar sesión para comprar
-                            </a>
+                        {% if producto.imagen %}
+                        <img src="{{ producto.imagen }}" class="card-img-top" alt="{{ producto.nombre }}"
+                            style="height: 200px; object-fit: cover;">
                         {% else %}
-                            <div class="alert alert-warning small mb-0">
-                                Los administradores no pueden realizar compras desde esta cuenta.
-                            </div>
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <span class="display-3">👟</span>
+                        </div>
                         {% endif %}
 
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">
+                                {{ producto.nombre }}
+                            </h5>
+
+                            <p class="text-muted">
+                                {{ producto.descripcion }}
+                            </p>
+
+                            <p class="text-primary fw-bold fs-5">
+                                ${{ producto.precio }}
+                            </p>
+
+                            <p class="small">
+                                Stock disponible: {{ producto.stock }}
+                            </p>
+
+                            {% if producto.stock > 0 %}
+                            <a href="{% url 'add_to_cart' producto._id %}" class="btn btn-primary w-100">
+                                Agregar al carrito
+                            </a>
+                            {% else %}
+                            <button class="btn btn-secondary w-100" disabled>
+                                Agotado
+                            </button>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        No hay productos disponibles actualmente.
+                    </div>
+                </div>
+                {% endfor %}
             </div>
+        </section>
+
+        <hr class="my-4">
+
+
+        {% if cart %}
+
+        <div class="row">
+
+            <!-- Productos del carrito -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm border-0 rounded-4 mb-4 bg-white">
+                    <div class="card-body p-0">
+
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0 align-middle">
+
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th scope="col" class="ps-3">Producto</th>
+                                        <th scope="col">Precio</th>
+                                        <th scope="col">Talla</th>
+                                        <th scope="col">Cantidad / Stock</th>
+                                        <th scope="col">Subtotal</th>
+                                        <th scope="col" class="text-end pe-3">Acciones</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for product_id, item in cart.items %}
+
+                                    <tr>
+                                        <td class="ps-3">
+                                            <div class="d-flex align-items-center gap-3">
+
+                                                {% if item.imagen %}
+                                                <img src="{{ item.imagen }}" alt="{{ item.nombre }}" width="50"
+                                                    height="50" class="rounded-3" style="object-fit: cover;">
+                                                {% else %}
+                                                <div class="bg-secondary rounded-3 text-white d-flex align-items-center justify-content-center"
+                                                    style="width: 50px; height: 50px;">
+                                                    👟
+                                                </div>
+                                                {% endif %}
+
+                                                <div>
+                                                    <span class="fw-bold text-dark d-block">
+                                                        {{ item.nombre }}
+                                                    </span>
+
+                                                    <small class="text-muted">
+                                                        Stock disponible:
+                                                        <strong>{{ item.stock }}</strong> u.
+                                                    </small>
+                                                </div>
+
+                                            </div>
+                                        </td>
+
+                                        <td class="text-secondary">
+                                            ${{ item.precio }}
+                                        </td>
+
+                                        <!-- Selección de talla -->
+                                        <td>
+                                            <form action="{% url 'update_cart_size' product_id %}" method="POST"
+                                                class="d-inline">
+
+                                                {% csrf_token %}
+
+                                                <label for="talla-select-{{ product_id }}" class="visually-hidden">
+                                                    Seleccionar talla para {{ item.nombre }}
+                                                </label>
+
+                                                <select id="talla-select-{{ product_id }}" name="talla"
+                                                    class="form-select form-select-sm" onchange="this.form.submit()"
+                                                    style="width: 80px;">
+
+                                                    <option value="37" {% if item.talla=="37" %}selected{% endif %}>37
+                                                    </option>
+                                                    <option value="38" {% if item.talla=="38" %}selected{% endif %}>38
+                                                    </option>
+                                                    <option value="39" {% if item.talla=="39" %}selected{% endif %}>39
+                                                    </option>
+                                                    <option value="40" {% if item.talla=="40" %}selected{% endif %}>40
+                                                    </option>
+                                                    <option value="41" {% if item.talla=="41" %}selected{% endif %}>41
+                                                    </option>
+                                                    <option value="42" {% if item.talla=="42" %}selected{% endif %}>42
+                                                    </option>
+
+                                                </select>
+                                            </form>
+                                        </td>
+
+                                        <!-- Cantidad -->
+                                        <td>
+                                            <div class="input-group input-group-sm" style="width: 110px;">
+
+                                                <a href="{% url 'decrease_quantity' product_id %}"
+                                                    class="btn btn-outline-secondary" aria-label="Disminuir cantidad">
+                                                    -
+                                                </a>
+
+                                                <span class="input-group-text bg-white text-dark fw-bold px-3">
+                                                    {{ item.cantidad }}
+                                                </span>
+
+                                                <a href="{% url 'increase_quantity' product_id %}"
+                                                    class="btn btn-outline-secondary" aria-label="Aumentar cantidad">
+                                                    +
+                                                </a>
+
+                                            </div>
+                                        </td>
+
+                                        <!-- Subtotal -->
+                                        <td class="fw-bold text-success">
+                                            ${{ item.subtotal }}
+                                        </td>
+
+                                        <!-- Eliminar -->
+                                        <td class="text-end pe-3">
+                                            <a href="{% url 'remove_from_cart' product_id %}"
+                                                class="btn btn-sm btn-outline-danger rounded-3"
+                                                aria-label="Eliminar producto"
+                                                onclick="return confirm('¿Deseas quitar este producto del pedido?');">
+                                                Eliminar
+                                            </a>
+                                        </td>
+
+                                    </tr>
+
+                                    {% endfor %}
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen del pedido -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm border-0 rounded-4 p-4 bg-white">
+
+                    <h2 class="h5 fw-bold mb-3 text-dark">
+                        Resumen del Pedido
+                    </h2>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal:</span>
+                        <span class="fw-semibold text-dark">${{ total }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-3 border-bottom pb-2">
+                        <span class="text-muted">Envío:</span>
+                        <span class="text-success fw-semibold">Gratis</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between mb-4">
+                        <span class="fw-bold text-dark">Total del Pedido:</span>
+                        <span class="fw-bold text-primary fs-4">${{ total }}</span>
+                    </div>
+
+                    {% if request.session.access_token and request.session.rol == "cliente" %}
+                    <a href="{% url 'create_order' %}" class="btn btn-success w-100 py-2 fw-bold rounded-3 shadow-sm">
+                        💳 Finalizar Pedido
+                    </a>
+                    {% elif not request.session.access_token %}
+                    <a href="{% url 'login' %}" class="btn btn-primary w-100 py-2 fw-bold rounded-3">
+                        Iniciar sesión para comprar
+                    </a>
+                    {% else %}
+                    <div class="alert alert-warning small mb-0">
+                        Los administradores no pueden realizar compras desde esta cuenta.
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+
+        </div>
 
         {% else %}
 
-            <!-- Carrito vacío -->
-            <div class="card shadow-sm border-0 rounded-4 text-center p-5 bg-white">
-                <div class="display-3 mb-3">🛒</div>
+        <!-- Carrito vacío -->
+        <div class="card shadow-sm border-0 rounded-4 text-center p-5 bg-white">
+            <div class="display-3 mb-3">🛒</div>
 
-                <h2 class="h4 fw-bold text-dark">
-                    Tu carrito está vacío
-                </h2>
+            <h2 class="h4 fw-bold text-dark">
+                Tu carrito está vacío
+            </h2>
 
-                <p class="text-muted">
-                    Todavía no has agregado productos a tu pedido.
-                </p>
+            <p class="text-muted">
+                Todavía no has agregado productos a tu pedido.
+            </p>
 
-                <a href="{% url 'admin_dashboard' %}" class="btn btn-primary mt-2">
-                    Volver al catálogo
-                </a>
-            </div>
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-primary mt-2">
+                Volver al catálogo
+            </a>
+        </div>
 
         {% endif %}
 
@@ -274,4 +329,5 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
