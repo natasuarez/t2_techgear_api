@@ -398,6 +398,7 @@ def add_to_cart(request, product_id):
 # VER CARRITO
 # ==========================================
 
+
 def view_cart(request):
 
     cart = request.session.get("cart", {})
@@ -417,6 +418,9 @@ def view_cart(request):
 
         if respuesta.status_code == 200:
             productos = respuesta.json()
+
+            for producto in productos:
+                producto["id"] = producto.get("_id")
 
     except requests.RequestException:
         messages.error(request, "No se pudieron cargar los productos.")
