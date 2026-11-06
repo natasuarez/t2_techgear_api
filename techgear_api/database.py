@@ -1,18 +1,34 @@
-import os
-from motor.motor_asyncio import AsyncIOMotorClient
-from dotenv import load_dotenv
 
-# Carga las variables del archivo .env
+import os
+from dotenv import load_dotenv
+from pymongo import MongoClient
+
 load_dotenv()
 
 MONGO_URI = os.getenv("MONGO_URI")
 
-# Inicializa el cliente asíncrono de MongoDB
-client = AsyncIOMotorClient(MONGO_URI)
+if not MONGO_URI:
+    raise ValueError("No se encontró MONGO_URI en el archivo .env")
 
-# Selecciona la base de datos (puedes cambiar "tienda_db" por el nombre que prefieras)
-database = client.get_database("tienda_db")
+cliente = MongoClient(
+    MONGO_URI,
+    serverSelectionTimeoutMS=20000
+)
 
-# Define las colecciones principales para productos y pedidos
-product_collection = database.get_collection("products")
-order_collection = database.get_collection("orders")
+db = cliente["techgear"]
+
+# Colecciones de MongoDB
+users_collection = db["users"]
+products_collection = db["products"]
+orders_collection = db["orders"]
+
+
+def verificar_conexion():
+    try:
+        cliente.admin.command("ping")
+        print("Conexion exitosa con MongoDB Atlas")
+        return True
+
+    except Exception as e:
+        print("Error de conexion:", e)
+        return False

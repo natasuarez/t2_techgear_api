@@ -10,10 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -24,15 +27,13 @@ SECRET_KEY = 'django-insecure-xnmqq_)96x@zo=57mg)!%@*!p*_+#ia+pat%e9tj4v_@$0^wj%
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # Cambiado a False para producción
+DEBUG = True  # Cambiado a False para producción
 
-ALLOWED_HOSTS = ['*'
-     'localhost',
-     '127.0.0.1',
-     '.vercel.app',
-     '.onrender.com'
-]  # Opcional, pero recomendado mientras estás en desarrollo local
-
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.vercel.app',
+]
 
 # Application definition
 
