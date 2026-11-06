@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 # Rutas del proyecto
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent
 
 # Cargar variables del archivo .env local
 load_dotenv(BASE_DIR / ".env")
@@ -23,7 +23,6 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     ".vercel.app",
 ]
-
 # Aplicaciones
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -52,7 +51,7 @@ ROOT_URLCONF = "urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "techgear_web" / "templates"],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
