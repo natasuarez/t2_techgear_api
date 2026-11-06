@@ -104,3 +104,5 @@ STATIC_URL = "static/"
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+# Guardar las sesiones mediante cookies firmadas
+SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
