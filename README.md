@@ -48,4 +48,4 @@ t2_techgear_api/
 
 link
 render: https://t2-techgear-api.onrender.com
-vercel: t2-techgear-k3yse9b3f-natasuarezxx-5873s-projects.vercel.app
+vercel: t2-techgear-api-omega.vercel.app
