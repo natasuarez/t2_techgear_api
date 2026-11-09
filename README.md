@@ -46,6 +46,7 @@ t2_techgear_api/
     ├── manage.py              # Administrador de Django
     └── requirements.txt       # Dependencias de Django
 
-link
-render: https://t2-techgear-api.onrender.com
-vercel: t2-techgear-api-omega.vercel.app
+## 🚀 Enlaces de Despliegue en Producción
+
+*   **🌐 Frontend (Vercel):** [t2-techgear-api-omega.vercel.app](https://t2-techgear-api-omega.vercel.app)
+*   **⚙️ Backend / API REST (Render):** [t2-techgear-api.onrender.com] (https://t2-techgear-api.onrender.com)
